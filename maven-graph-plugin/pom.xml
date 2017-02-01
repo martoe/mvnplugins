@@ -22,6 +22,7 @@
     <groupId>org.fusesource.mvnplugins</groupId>
     <artifactId>mvnplugins</artifactId>
     <version>1.39.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
   </parent>
   
   <groupId>org.fusesource.mvnplugins</groupId>

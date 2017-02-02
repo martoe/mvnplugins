@@ -51,6 +51,7 @@ public class DependencyVisualizer {
     boolean keepDot;
     String label;
     boolean hideTransitive;
+    boolean hideDuplicateDependencies;
     Log log;
     boolean cascade;
     String direction="TB";
@@ -548,6 +549,27 @@ public class DependencyVisualizer {
             }
         }
 
+        // Remove all duplicate edges
+        if (hideDuplicateDependencies) {
+          Map<String, Edge> processedEdges = new HashMap<String, Edge>();
+          for (Edge edge : new ArrayList<Edge>(edges)) {
+            String id = edge.parent.toString() + edge.child.toString();
+            Edge existingEdge = processedEdges.get(id);
+            if (existingEdge != null) {
+              log.warn("Edge already exists, removing it: " + edge);
+              remove(edge);
+              if (existingEdge.optional && !edge.optional) {
+                existingEdge.optional = false;
+              }
+              if (!existingEdge.scope.equals(edge.scope)) {
+                existingEdge.scope = "mixed";
+              }
+            } else {
+              processedEdges.put(id, edge);
+            }
+          }
+        }
+        
         // Remove all the non root nodes that are disconnected.
         for (Node node : new ArrayList<Node>(nodes.values()) ) {
             if (node.parents.size()==0 && node.roots==0) {

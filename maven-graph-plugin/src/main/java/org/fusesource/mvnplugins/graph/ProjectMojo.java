@@ -244,6 +244,14 @@ public class ProjectMojo extends AbstractMojo {
      */
     protected String direction;
 
+    /**
+     * If set to true then dependencies that only differ by their scope will be suppressed
+     * (such dependencies will be displayed with scope "mixed")
+     *
+     * @parameter default-value="false" expression="${hide-duplicate-dependencies}"
+     */
+    protected boolean hideDuplicateDependencies;
+    
     public void execute() throws MojoExecutionException {
         try {
             DependencyVisualizer visualizer = new DependencyVisualizer();
@@ -259,6 +267,7 @@ public class ProjectMojo extends AbstractMojo {
             visualizer.keepDot = keepDot;
             visualizer.label = label;
             visualizer.hideTransitive = hideTransitive;
+            visualizer.hideDuplicateDependencies = hideDuplicateDependencies;
             visualizer.log = getLog();
 
             if (hideScopes != null) {

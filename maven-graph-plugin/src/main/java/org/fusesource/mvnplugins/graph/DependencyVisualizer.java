@@ -213,6 +213,41 @@ public class DependencyVisualizer {
             return rc;
         }
 
+        public boolean isExcluded() {
+            for (String exclude : excludeGroupIds) {
+                if (exclude.endsWith("*")) {
+                    //wildcard match
+                    String prefix = exclude.substring(0, exclude.length() - 1); // remove "*"
+                    if (artifact.getGroupId().startsWith(prefix)) {
+                        log.debug("Excluding (wildcard) " + artifact.getGroupId() + ":" + artifact.getArtifactId());
+                        return true;
+                    }
+                } else {
+                    //exact match
+                    if (artifact.getGroupId().equals(exclude)) {
+                        log.debug("Excluding " + artifact.getGroupId() + ":" + artifact.getArtifactId());
+                        return true;
+                    }
+                }
+            }
+            for (String exclude : excludeArtifactIds) {
+                if (exclude.endsWith("*")) {
+                    //wildcard match
+                    String prefix = exclude.substring(0, exclude.length() - 1); //remove "*"
+                    if (artifact.getArtifactId().startsWith(prefix)) {
+                        log.debug("Excluding artifactId (wildcard) " + artifact.getGroupId() + ":" + artifact.getArtifactId());
+                        return true;
+                    }
+                } else {
+                    //exact match
+                    if (artifact.getArtifactId().equals(exclude)) {
+                        log.debug("Excluding artifactId " + artifact.getGroupId() + ":" + artifact.getArtifactId());
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     private class Edge {
@@ -272,13 +307,13 @@ public class DependencyVisualizer {
                if (exclude.endsWith("*")) {
                   //wildcard match
                   String prefix = exclude.substring(0, exclude.length() - 1); // remove "*"
-                  if (groupId.startsWith(prefix)) {
+                  if (groupId.startsWith(prefix) || parent.artifact.getGroupId().startsWith(prefix)) {
                      log.debug("Excluding (wildcard) " + groupId + ":" + artifactId);
                      return true;
                   }
                } else {
                   //exact match
-                  if (groupId.equals(exclude)) {
+                  if (groupId.equals(exclude) || parent.artifact.getGroupId().equals(exclude)) {
                      log.debug("Excluding " + groupId + ":" + artifactId);
                      return true;
                   }
@@ -311,13 +346,13 @@ public class DependencyVisualizer {
                 if (exclude.endsWith("*")) {
                     //wildcard match
                     String prefix = exclude.substring(0, exclude.length()-1); //remove "*"
-                    if (artifactId.startsWith(prefix)) {
+                    if (artifactId.startsWith(prefix) || parent.artifact.getArtifactId().startsWith(prefix)) {
                         log.debug("Excluding artifactId (wildcard) " + groupId + ":" + artifactId);
                         return true;
                     }
                 } else {
                     //exact match
-                    if (artifactId.equals(exclude)) {
+                    if (artifactId.equals(exclude) || parent.artifact.getArtifactId().equals(exclude)) {
                         log.debug("Excluding artifactId " + groupId + ":" + artifactId);
                         return true;
                     }
@@ -572,7 +607,7 @@ public class DependencyVisualizer {
         
         // Remove all the non root nodes that are disconnected.
         for (Node node : new ArrayList<Node>(nodes.values()) ) {
-            if (node.parents.size()==0 && node.roots==0) {
+            if ((node.parents.size()==0 && node.roots==0) || node.isExcluded()) {
                 log.debug("Dropping orphaned node: "+node);
                 remove(node);
             }

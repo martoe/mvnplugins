@@ -26,7 +26,7 @@
 
   <groupId>org.fusesource.mvnplugins</groupId>
   <artifactId>mvnplugins</artifactId>
-  <version>1.39</version>
+  <version>1.39.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>FuseSource Maven Plugins</name>
@@ -54,7 +54,7 @@
     <forge-project-id-uc>MVNPLUGINS</forge-project-id-uc>
     
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <release-altGitURL>scm:git:git://github.com/fusesource/mvnplugins.git</release-altGitURL>
+    <release-altGitURL>scm:git:git://github.com/martoe/mvnplugins.git</release-altGitURL>
   </properties>
 
   <url>http://${forge-project-id}.fusesource.org</url>
@@ -92,9 +92,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git://github.com/fusesource/mvnplugins.git</connection>
+    <connection>scm:git:git://github.com/martoe/mvnplugins.git</connection>
     <developerConnection>${release-altGitURL}</developerConnection>
-    <url>http://github.com/fusesource/mvnplugins/tree/master</url>
+    <url>http://github.com/martoe/mvnplugins/tree/master</url>
     <tag>mvnplugins-1.39</tag>
   </scm>
       

@@ -60,9 +60,9 @@
   </distributionManagement>
 
   <scm>
-    <connection>scm:git:git://forge.fusesource.com/mvnplugins.git</connection>
-    <developerConnection>scm:git:ssh://git@forge.fusesource.com/mvnplugins.git</developerConnection>
-    <url>http://github.com/chirino/mvnplugins/tree/master</url>
+    <connection>scm:git:git://github.com/martoe/mvnplugins.git</connection>
+    <developerConnection>scm:git:git://github.com/martoe/mvnplugins.git</developerConnection>
+    <url>http://github.com/martoe/mvnplugins/tree/master</url>
   </scm>
 
   <!-- including A developer as it's required by the maven poms going into central -->

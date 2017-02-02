@@ -556,7 +556,7 @@ public class DependencyVisualizer {
             String id = edge.parent.toString() + edge.child.toString();
             Edge existingEdge = processedEdges.get(id);
             if (existingEdge != null) {
-              log.warn("Edge already exists, removing it: " + edge);
+              log.debug("Edge already exists, removing it: " + edge);
               remove(edge);
               if (existingEdge.optional && !edge.optional) {
                 existingEdge.optional = false;

@@ -60,6 +60,8 @@ public class DependencyVisualizer {
     Set<String> includeGroupIds = new HashSet<String>();
     Set<String> excludeArtifactIds = new HashSet<String>();
     Set<String> includeArtifactIds = new HashSet<String>();
+    /** collect the groupIds/artifactIds of all root nodes (internal use only) */
+    private final Set<String> rootIds = new HashSet<String>();
     
     private class Node {
         private final String id;
@@ -470,7 +472,17 @@ public class DependencyVisualizer {
     }
 
     public void add(DependencyNode dn) {
+        rootIds.add(dn.getArtifact().getGroupId() + ":" + dn.getArtifact().getArtifactId());
         add(dn, true);
+        // if the new node depends on a variation (i.e. different type or classifier)
+        // of an existing root node, also make this variation a "root".
+        // this is necessary so that such variations will be visible when using "hideExternal=true"
+        for (Node node : nodes.values()) {
+            if (node.roots == 0 && rootIds.contains(node.artifact.getGroupId() + ":" + node.artifact.getArtifactId())) {
+                log.debug("Root node variation found: " + node);
+                node.roots++;
+            }
+        }
     }
 
     private Node add(DependencyNode dn, boolean root) {

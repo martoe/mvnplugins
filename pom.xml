@@ -27,7 +27,7 @@
 
   <groupId>org.fusesource.mvnplugins</groupId>
   <artifactId>mvnplugins</artifactId>
-  <version>1.39.1-SNAPSHOT</version>
+  <version>1.39.1</version>
   <packaging>pom</packaging>
   
   <name>FuseSource Maven Plugins</name>
@@ -84,7 +84,7 @@
     <connection>scm:git:git://github.com/martoe/mvnplugins.git</connection>
     <developerConnection>${release-altGitURL}</developerConnection>
     <url>http://github.com/martoe/mvnplugins/tree/master</url>
-    <tag>mvnplugins-1.39</tag>
+    <tag>mvnplugins-1.39.1</tag>
   </scm>
       
   <distributionManagement>

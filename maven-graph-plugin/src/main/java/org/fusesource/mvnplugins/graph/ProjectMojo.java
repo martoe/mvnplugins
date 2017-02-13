@@ -200,6 +200,11 @@ public class ProjectMojo extends AbstractMojo {
      * @parameter expression="${exclude-artifact-ids}"
      */
     protected String excludeArtifactIds;
+    /**
+     * A comma separated list of artifact types to exclude. A '*' can be appended <b>only</b> at the end<br/>
+     * @parameter expression="${exclude-artifact-types}"
+     */
+    protected String excludeArtifactTypes;
 
     /**
      * If set to true then the module type label will not be drawn.
@@ -292,6 +297,11 @@ public class ProjectMojo extends AbstractMojo {
                for (String artifactId : excludeArtifactIds.split(",")) {
                   visualizer.excludeArtifactIds.add(artifactId.trim());
                }
+            }
+            if (excludeArtifactTypes != null) {
+                for (String artifactType : excludeArtifactTypes.split(",")) {
+                    visualizer.excludeArtifactTypes.add(artifactType.trim());
+                }
             }
             
             if (includeArtifactIds != null) {

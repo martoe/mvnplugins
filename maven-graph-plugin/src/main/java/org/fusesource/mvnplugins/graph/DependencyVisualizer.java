@@ -60,6 +60,7 @@ public class DependencyVisualizer {
     Set<String> includeGroupIds = new HashSet<String>();
     Set<String> excludeArtifactIds = new HashSet<String>();
     Set<String> includeArtifactIds = new HashSet<String>();
+    Set<String> excludeArtifactTypes = new HashSet<String>();
     /** collect the groupIds/artifactIds of all root nodes (internal use only) */
     private final Set<String> rootIds = new HashSet<String>();
     
@@ -248,6 +249,22 @@ public class DependencyVisualizer {
                     }
                 }
             }
+            for (String exclude : excludeArtifactTypes) {
+                if (exclude.endsWith("*")) {
+                    //wildcard match
+                    String prefix = exclude.substring(0, exclude.length() - 1); //remove "*"
+                    if (artifact.getType().startsWith(prefix)) {
+                        log.debug("Excluding artifactType (wildcard) " + artifact.getGroupId() + ":" + artifact.getArtifactId() + ":" + artifact.getType());
+                        return true;
+                    }
+                } else {
+                    //exact match
+                    if (artifact.getType().equals(exclude)) {
+                        log.debug("Excluding artifactType " + artifact.getGroupId() + ":" + artifact.getArtifactId() + ":" + artifact.getType());
+                        return true;
+                    }
+                }
+            }
             return false;
         }
     }
@@ -260,6 +277,7 @@ public class DependencyVisualizer {
         private final DependencyNode dependencyNode;
         private String groupId;
         private String artifactId;
+        private final String artifactType;
 
         public Edge(Node parent, Node child, DependencyNode dependencyNode) {
             this.parent = parent;
@@ -269,6 +287,7 @@ public class DependencyVisualizer {
             this.optional = dependencyNode.getArtifact().isOptional();
             this.groupId = dependencyNode.getArtifact().getGroupId();
             this.artifactId = dependencyNode.getArtifact().getArtifactId();
+            artifactType = dependencyNode.getArtifact().getType();
         }
         public Edge(Edge edge) {
             this.parent = edge.parent;
@@ -276,6 +295,7 @@ public class DependencyVisualizer {
             this.dependencyNode = edge.dependencyNode;
             this.scope = edge.scope;
             this.optional = edge.optional;
+            artifactType = edge.artifactType;
         }
 
         public Edge optional(boolean optional) {
@@ -356,6 +376,22 @@ public class DependencyVisualizer {
                     //exact match
                     if (artifactId.equals(exclude) || parent.artifact.getArtifactId().equals(exclude)) {
                         log.debug("Excluding artifactId " + groupId + ":" + artifactId);
+                        return true;
+                    }
+                }
+            }
+            for (String exclude : excludeArtifactTypes) {
+                if (exclude.endsWith("*")) {
+                    //wildcard match
+                    String prefix = exclude.substring(0, exclude.length()-1); //remove "*"
+                    if (artifactType.startsWith(prefix) || parent.artifact.getType().startsWith(prefix)) {
+                        log.debug("Excluding artifactType (wildcard) " + groupId + ":" + artifactId + ":" + artifactType);
+                        return true;
+                    }
+                } else {
+                    //exact match
+                    if (artifactType.equals(exclude) || parent.artifact.getType().equals(exclude)) {
+                        log.debug("Excluding artifactType " + groupId + ":" + artifactId + ":" + artifactType);
                         return true;
                     }
                 }

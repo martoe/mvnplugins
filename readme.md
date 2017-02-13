@@ -13,6 +13,7 @@ Plugins
 * Maven Uberize Plugin:  Provides the capability to package the artifact in an uber-jar, including its dependencies and
   to shade/rename/relocate the packages of some of the dependencies.
 * Maven Avro Plugin:  Compiles Avro definition files see: http://hadoop.apache.org/avro/
+* Release with `>mvn -pl .,maven-graph-plugin clean release:prepare`
 
 ... that's it (for now) ...
 
